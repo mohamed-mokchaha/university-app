@@ -2,51 +2,59 @@
 import { useState } from "react";
 import "../App.css";
 
-function Studentcard(props) {
-  const [CoordonneesVisibles, setCoordonneesVisibles] = useState(false);
+function Studentcard({ etudiant, onModifier, onSupprimer }) {
+  const [coordonneesVisibles, setCoordonneesVisibles] = useState(false);
 
-  function Visibles() {
-    setCoordonneesVisibles(!CoordonneesVisibles);
-  }
-
-  function supprimer() {
-    props.onSupprimer(props.id);
-  }
+  const {
+    id, prenom, nom, email, telephone,
+    filiere, anneeEtude, groupe, ville, image,
+  } = etudiant;
 
   return (
-    <div>
-      <h1 id="F">Fiche Etudiant</h1>
+    <div className="student-card">
+      <h2 className="card-title">Fiche Etudiant</h2>
 
-      <img
-        src={props.image}
-        alt="Photo de l'étudiant"
-        id="img"
-      />
+      {image && (
+        <img
+          src={image}
+          alt={`Photo de ${prenom} ${nom}`}
+          className="student-img"
+        />
+      )}
 
-      <p><strong>Prénom :</strong> {props.prenom}</p>
-      <p><strong>Nom :</strong> {props.nom}</p>
+      <p><strong>Prénom :</strong> {prenom}</p>
+      <p><strong>Nom :</strong> {nom}</p>
 
-      {CoordonneesVisibles && (
+      {coordonneesVisibles && (
         <>
-          <p><strong>Email :</strong> {props.email}</p>
-          <p><strong>Téléphone :</strong> {props.telephone}</p>
+          <p><strong>Email :</strong> {email}</p>
+          <p><strong>Téléphone :</strong> {telephone}</p>
         </>
       )}
 
-      <p><strong>Filière :</strong> {props.filiere}</p>
-      <p><strong>Année d'étude :</strong> {props.anneeEtude}</p>
-      <p><strong>Groupe :</strong> {props.groupe}</p>
-      <p><strong>Ville :</strong> {props.ville}</p>
+      <p><strong>Filière :</strong> {filiere}</p>
+      <p>
+        <strong>Année d'étude :</strong> {anneeEtude}
+        {anneeEtude === 1 ? "ère" : "ème"} année
+      </p>
+      <p><strong>Groupe :</strong> {groupe}</p>
+      <p><strong>Ville :</strong> {ville}</p>
 
-      <a href={`mailto:${props.email}`} className="btn">
-        Contacter
-      </a>
+      <a href={`mailto:${email}`} className="btn">Contacter</a>
 
-      <button onClick={Visibles} className="btn">
-        Masquer / Afficher
+      <button
+        type="button"
+        className="btn"
+        onClick={() => setCoordonneesVisibles((v) => !v)}
+      >
+        {coordonneesVisibles ? "Masquer" : "Afficher"} les coordonnées
       </button>
 
-      <button onClick={supprimer} className="btn">
+      <button type="button" className="btn" onClick={() => onModifier(etudiant)}>
+        Modifier
+      </button>
+
+      <button type="button" className="btn" onClick={() => onSupprimer(id)}>
         Supprimer
       </button>
     </div>
